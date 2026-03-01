@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"io.micrometer.prometheus","l":"PrometheusConfig"},{"p":"io.micrometer.prometheus","l":"PrometheusMeterRegistry"}];updateSearchResults();
