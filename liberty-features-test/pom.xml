@@ -10,6 +10,9 @@
 	<artifactId>liberty-features-test</artifactId>
 	<packaging>war</packaging>
 
+	<name>Liberty Features Test</name>
+	<description>Test application for Liberty Features</description>
+
 	<properties>
 		<maven.deploy.skip>true</maven.deploy.skip>
 

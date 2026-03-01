@@ -9,7 +9,9 @@
 
 	<artifactId>liberty-micrometer-1.0</artifactId>
 	<packaging>esa</packaging>
+
 	<name>micrometer-1.0</name>
+	<description>Liberty Feature making the Micrometer API visible</description>
 
 	<dependencies>
 		<dependency>

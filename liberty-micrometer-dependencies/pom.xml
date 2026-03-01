@@ -10,6 +10,9 @@
 	<artifactId>liberty-micrometer-dependencies</artifactId>
 	<packaging>bundle</packaging>
 
+	<name>Liberty Micrometer Dependencies</name>
+	<description>Micrometer dependencies including prometheus exporter</description>
+
 	<dependencies>
 		<dependency>
 			<groupId>io.micrometer</groupId>

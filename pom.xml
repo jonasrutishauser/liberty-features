@@ -14,6 +14,7 @@
 
 	<url>${url}</url>
 	<name>Liberty Features</name>
+	<description>Additional Liberty Features</description>
 
 	<modules>
 		<module>liberty-micrometer</module>

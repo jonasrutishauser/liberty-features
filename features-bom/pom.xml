@@ -10,6 +10,9 @@
 	<artifactId>features-bom</artifactId>
 	<packaging>pom</packaging>
 
+	<name>Liberty Features BOM</name>
+	<description>BOM for Liberty Features</description>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
