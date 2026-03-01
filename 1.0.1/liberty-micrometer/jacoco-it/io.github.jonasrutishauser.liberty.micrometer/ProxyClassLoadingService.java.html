@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProxyClassLoadingService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Liberty Micrometer</a> &gt; <a href="index.source.html" class="el_package">io.github.jonasrutishauser.liberty.micrometer</a> &gt; <span class="el_source">ProxyClassLoadingService.java</span></div><h1>ProxyClassLoadingService.java</h1><pre class="source lang-java linenums">package io.github.jonasrutishauser.liberty.micrometer;
+
+import java.io.File;
+import java.security.ProtectionDomain;
+import java.util.List;
+import java.util.Map;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+import com.ibm.wsspi.adaptable.module.Container;
+import com.ibm.wsspi.classloading.ClassLoaderConfiguration;
+import com.ibm.wsspi.classloading.ClassLoaderIdentity;
+import com.ibm.wsspi.classloading.ClassLoadingService;
+import com.ibm.wsspi.classloading.ClassTransformer;
+import com.ibm.wsspi.classloading.GatewayConfiguration;
+import com.ibm.wsspi.library.Library;
+
+import io.micrometer.core.instrument.Metrics;
+
+@Component
+<span class="fc" id="L22">public class ProxyClassLoadingService implements ClassLoadingService {</span>
+
+    private ClassLoadingService delegate;
+
+    @Override
+    public ClassLoader createBundleAddOnClassLoader(List&lt;File&gt; classPath, ClassLoader gwClassLoader,
+            ClassLoaderConfiguration clConfig) {
+<span class="fc" id="L29">        return delegate.createBundleAddOnClassLoader(classPath,</span>
+<span class="fc" id="L30">                delegate.unify(gwClassLoader, Metrics.class.getClassLoader()), clConfig);</span>
+    }
+
+    @Override
+    public ClassLoader createChildClassLoader(List&lt;Container&gt; arg0, ClassLoaderConfiguration arg1) {
+<span class="nc" id="L35">        return delegate.createChildClassLoader(arg0, arg1);</span>
+    }
+
+    @Override
+    public ClassLoaderConfiguration createClassLoaderConfiguration() {
+<span class="fc" id="L40">        return delegate.createClassLoaderConfiguration();</span>
+    }
+
+    @Override
+    public GatewayConfiguration createGatewayConfiguration() {
+<span class="nc" id="L45">        return delegate.createGatewayConfiguration();</span>
+    }
+
+    @Override
+    public ClassLoaderIdentity createIdentity(String arg0, String arg1) {
+<span class="fc" id="L50">        return delegate.createIdentity(arg0, arg1);</span>
+    }
+
+    @Override
+    public ClassLoader createThreadContextClassLoader(ClassLoader arg0) {
+<span class="nc" id="L55">        return delegate.createThreadContextClassLoader(arg0);</span>
+    }
+
+    @Override
+    public ClassLoader createTopLevelClassLoader(List&lt;Container&gt; arg0, GatewayConfiguration arg1,
+            ClassLoaderConfiguration arg2) {
+<span class="nc" id="L61">        return delegate.createTopLevelClassLoader(arg0, arg1, arg2);</span>
+    }
+
+    @Override
+    public void destroyThreadContextClassLoader(ClassLoader arg0) {
+<span class="nc" id="L66">        delegate.destroyThreadContextClassLoader(arg0);</span>
+<span class="nc" id="L67">    }</span>
+
+    @Override
+    public ClassLoader getShadowClassLoader(ClassLoader arg0) {
+<span class="nc" id="L71">        return delegate.getShadowClassLoader(arg0);</span>
+    }
+
+    @Override
+    public ClassLoader getSharedLibraryClassLoader(Library arg0) {
+<span class="nc" id="L76">        return delegate.getSharedLibraryClassLoader(arg0);</span>
+    }
+
+    @Override
+    public boolean isAppClassLoader(ClassLoader arg0) {
+<span class="nc" id="L81">        return delegate.isAppClassLoader(arg0);</span>
+    }
+
+    @Override
+    public boolean isThreadContextClassLoader(ClassLoader arg0) {
+<span class="nc" id="L86">        return delegate.isThreadContextClassLoader(arg0);</span>
+    }
+
+    @Override
+    public boolean registerTransformer(ClassTransformer arg0, ClassLoader arg1) {
+<span class="nc" id="L91">        return delegate.registerTransformer(arg0, arg1);</span>
+    }
+
+    @Override
+    public void setSharedLibraryProtectionDomains(Map&lt;String, ProtectionDomain&gt; arg0) {
+<span class="nc" id="L96">        delegate.setSharedLibraryProtectionDomains(arg0);</span>
+<span class="nc" id="L97">    }</span>
+
+    @Override
+    public ClassLoader unify(ClassLoader arg0, ClassLoader... arg1) {
+<span class="nc" id="L101">        return delegate.unify(arg0, arg1);</span>
+    }
+
+    @Override
+    public boolean unregisterTransformer(ClassTransformer arg0, ClassLoader arg1) {
+<span class="nc" id="L106">        return delegate.unregisterTransformer(arg0, arg1);</span>
+    }
+
+    @Reference(name = &quot;classLoadingService&quot;, service = ClassLoadingService.class)
+    protected void setClassLoadingService(ClassLoadingService ref) {
+<span class="fc" id="L111">        delegate = ref;</span>
+<span class="fc" id="L112">    }</span>
+
+    protected void unsetClassLoadingService(ClassLoadingService ref) {
+<span class="fc" id="L115">        delegate = null;</span>
+<span class="fc" id="L116">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

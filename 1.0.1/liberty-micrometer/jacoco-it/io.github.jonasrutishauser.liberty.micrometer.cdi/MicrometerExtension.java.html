@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MicrometerExtension.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Liberty Micrometer</a> &gt; <a href="index.source.html" class="el_package">io.github.jonasrutishauser.liberty.micrometer.cdi</a> &gt; <span class="el_source">MicrometerExtension.java</span></div><h1>MicrometerExtension.java</h1><pre class="source lang-java linenums">package io.github.jonasrutishauser.liberty.micrometer.cdi;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import io.micrometer.common.annotation.ValueExpressionResolver;
+import io.micrometer.common.annotation.ValueResolver;
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.inject.AmbiguousResolutionException;
+import jakarta.enterprise.inject.spi.AfterBeanDiscovery;
+import jakarta.enterprise.inject.spi.Bean;
+import jakarta.enterprise.inject.spi.BeanManager;
+import jakarta.enterprise.inject.spi.BeforeBeanDiscovery;
+import jakarta.enterprise.inject.spi.Extension;
+import jakarta.enterprise.inject.spi.ProcessBean;
+import jakarta.enterprise.util.Nonbinding;
+import jakarta.inject.Singleton;
+
+<span class="fc" id="L22">public class MicrometerExtension implements Extension {</span>
+
+<span class="fc" id="L24">    private final Set&lt;Bean&lt;? extends ValueResolver&gt;&gt; valueResolverBeans = new HashSet&lt;&gt;();</span>
+    private Bean&lt;? extends ValueExpressionResolver&gt; valueExpressionResolverBean;
+
+    void beforeBeanDiscovery(@Observes BeforeBeanDiscovery event) {
+<span class="fc" id="L28">        event.configureInterceptorBinding(Counted.class).methods()</span>
+<span class="fc" id="L29">                .forEach(member -&gt; member.add(Nonbinding.Literal.INSTANCE));</span>
+<span class="fc" id="L30">        event.configureInterceptorBinding(Timed.class).methods()</span>
+<span class="fc" id="L31">                .forEach(member -&gt; member.add(Nonbinding.Literal.INSTANCE));</span>
+<span class="fc" id="L32">        event.addAnnotatedType(MicrometerCountedInterceptor.class, MicrometerCountedInterceptor.class.getName())</span>
+<span class="fc" id="L33">                .add(new CountedLiteral());</span>
+<span class="fc" id="L34">        event.addAnnotatedType(MicrometerTimedInterceptor.class, MicrometerTimedInterceptor.class.getName());</span>
+<span class="fc" id="L35">    }</span>
+
+    &lt;T extends ValueResolver&gt; void discoverValueResolvers(@Observes ProcessBean&lt;T&gt; event) {
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (event.getBean().getBeanClass() != null</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">                &amp;&amp; ValueResolver.class.isAssignableFrom(event.getBean().getBeanClass())) {</span>
+<span class="fc" id="L40">            valueResolverBeans.add(event.getBean());</span>
+        }
+<span class="fc" id="L42">    }</span>
+
+    &lt;T extends ValueExpressionResolver&gt; void discoverValueExpressionResolver(@Observes ProcessBean&lt;T&gt; event) {
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        if (event.getBean().getBeanClass() != null</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">                &amp;&amp; ValueResolver.class.isAssignableFrom(event.getBean().getBeanClass())) {</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">            if (valueExpressionResolverBean != null) {</span>
+<span class="nc" id="L48">                event.addDefinitionError(</span>
+                        new AmbiguousResolutionException(&quot;Multiple ValueExpressionResolver beans found: &quot;
+<span class="nc" id="L50">                                + valueExpressionResolverBean + &quot; and &quot; + event.getBean()));</span>
+            }
+<span class="nc" id="L52">            valueExpressionResolverBean = event.getBean();</span>
+        }
+<span class="nc" id="L54">    }</span>
+
+    void registerMeterTagsSupport(@Observes AfterBeanDiscovery event, BeanManager beanManager) {
+<span class="fc" id="L57">        event.addBean() //</span>
+<span class="fc" id="L58">                .beanClass(MeterTagsSupport.class) //</span>
+<span class="fc" id="L59">                .addType(MeterTagsSupport.class) //</span>
+<span class="fc" id="L60">                .scope(Singleton.class) //</span>
+<span class="fc" id="L61">                .createWith(</span>
+<span class="fc" id="L62">                        ctx -&gt; new MeterTagsSupport(</span>
+<span class="fc" id="L63">                                valueResolverBeans.stream()</span>
+<span class="fc" id="L64">                                        .collect(Collectors.toMap(Bean::getBeanClass,</span>
+<span class="fc" id="L65">                                                bean -&gt; (ValueResolver) beanManager.getReference(bean,</span>
+                                                        ValueResolver.class, ctx))),
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">                                valueExpressionResolverBean == null ? null</span>
+<span class="pc" id="L68">                                        : (ValueExpressionResolver) beanManager.getReference(</span>
+                                                valueExpressionResolverBean, ValueExpressionResolver.class, ctx)));
+<span class="fc" id="L70">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

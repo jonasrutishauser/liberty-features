@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"io.github.jonasrutishauser.liberty.micrometer"},{"l":"io.github.jonasrutishauser.liberty.micrometer.cdi"}];updateSearchResults();
