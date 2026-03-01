@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProxyService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">liberty-micrometer</a> &gt; <a href="index.source.html" class="el_package">io.github.jonasrutishauser.liberty.micrometer</a> &gt; <span class="el_source">ProxyService.java</span></div><h1>ProxyService.java</h1><pre class="source lang-java linenums">package io.github.jonasrutishauser.liberty.micrometer;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.hooks.service.EventListenerHook;
+import org.osgi.framework.hooks.service.FindHook;
+import org.osgi.framework.hooks.service.ListenerHook.ListenerInfo;
+
+public class ProxyService&lt;T&gt; implements EventListenerHook, FindHook {
+
+    private final Bundle bundle;
+    private final ServiceReference&lt;T&gt; reference;
+    private final BundleContext context;
+    private ServiceRegistration&lt;?&gt; reg;
+
+<span class="fc" id="L24">    ProxyService(BundleContext context, ServiceReference&lt;T&gt; reference, Bundle bundle) {</span>
+<span class="fc" id="L25">        this.context = context;</span>
+<span class="fc" id="L26">        this.bundle = bundle;</span>
+<span class="fc" id="L27">        this.reference = reference;</span>
+<span class="fc" id="L28">    }</span>
+
+    boolean open() throws BundleException {
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        boolean active = bundle.getState() == Bundle.ACTIVE;</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (active) {</span>
+<span class="fc" id="L33">            bundle.stop(Bundle.STOP_TRANSIENT);</span>
+        }
+<span class="fc" id="L35">        reg = context.registerService(new String[] {FindHook.class.getName(), EventListenerHook.class.getName()}, this,</span>
+                null);
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (active) {</span>
+<span class="fc" id="L38">            bundle.start(Bundle.START_TRANSIENT);</span>
+        }
+<span class="fc" id="L40">        return active;</span>
+    }
+
+    public void close() {
+<span class="fc" id="L44">        reg.unregister();</span>
+<span class="fc" id="L45">    }</span>
+
+    @Override
+    public void find(BundleContext context, String name, String filter, boolean allServices,
+            Collection&lt;ServiceReference&lt;?&gt;&gt; references) {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (context.getBundle() == bundle) {</span>
+<span class="fc" id="L51">            references.remove(reference);</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        } else if (Arrays.asList((String[]) reference.getProperty(&quot;objectClass&quot;)).contains(name)) {</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">            references.removeIf(ref -&gt; ref.getBundle() == context.getBundle());</span>
+        }
+<span class="fc" id="L55">    }</span>
+
+    @Override
+    public void event(ServiceEvent event, Map&lt;BundleContext, Collection&lt;ListenerInfo&gt;&gt; listeners) {
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (event.getServiceReference().equals(reference)) {</span>
+<span class="nc" id="L60">            listeners.remove(bundle.getBundleContext());</span>
+        }
+<span class="fc" id="L62">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
