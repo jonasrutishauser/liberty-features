@@ -1,15 +1,15 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MeterTagsSupport,33,127,11,7,7,29,8,7,0,6
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MicrometerTimedInterceptor.NormalTimer,20,67,3,3,2,14,4,2,1,2
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MicrometerCountedInterceptor,52,79,9,5,14,21,9,3,2,3
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MicrometerTimedInterceptor,43,97,4,8,11,24,5,7,1,5
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MicrometerTimedInterceptor.LongTimer,71,0,2,0,19,0,6,0,5,0
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MicrometerTimedInterceptor.Timer,11,9,2,0,1,4,2,1,1,1
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MeterRegistryProvider,0,5,0,0,0,2,0,2,0,2
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,CountedLiteral,0,12,0,0,0,5,0,5,0,5
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MicrometerExtension,37,104,9,3,7,26,7,8,1,8
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,InterceptorHelper,58,71,3,1,11,17,2,8,0,8
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer,ProxyClassLoadingService,70,38,0,0,15,9,13,6,13,6
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer,Activator,0,91,3,7,0,22,3,5,0,3
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer,MicrometerCDIMetadata,0,9,0,0,0,3,0,3,0,3
-liberty-micrometer,io.github.jonasrutishauser.liberty.micrometer,ProxyService,9,97,5,9,1,21,5,8,0,6
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MeterTagsSupport,33,127,11,7,7,29,8,7,0,6
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MicrometerTimedInterceptor.NormalTimer,20,67,3,3,2,14,4,2,1,2
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MicrometerCountedInterceptor,52,79,9,5,14,21,9,3,2,3
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MicrometerTimedInterceptor,43,97,4,8,11,24,5,7,1,5
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MicrometerTimedInterceptor.LongTimer,71,0,2,0,19,0,6,0,5,0
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MicrometerTimedInterceptor.Timer,11,9,2,0,1,4,2,1,1,1
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MeterRegistryProvider,0,5,0,0,0,2,0,2,0,2
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,CountedLiteral,0,12,0,0,0,5,0,5,0,5
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,MicrometerExtension,37,104,9,3,7,26,7,8,1,8
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer.cdi,InterceptorHelper,58,71,3,1,11,17,2,8,0,8
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer,ProxyClassLoadingService,70,38,0,0,15,9,13,6,13,6
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer,Activator,0,91,3,7,0,22,3,5,0,3
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer,MicrometerCDIMetadata,0,9,0,0,0,3,0,3,0,3
+Liberty Micrometer,io.github.jonasrutishauser.liberty.micrometer,ProxyService,9,97,5,9,1,21,5,8,0,6
