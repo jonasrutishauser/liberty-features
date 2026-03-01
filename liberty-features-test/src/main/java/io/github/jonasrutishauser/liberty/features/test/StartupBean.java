@@ -1,7 +1,12 @@
 package io.github.jonasrutishauser.liberty.features.test;
 
+import static java.lang.System.Logger.Level.INFO;
+
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.LogManager;
 
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
@@ -28,7 +33,7 @@ public class StartupBean {
     @Counted(value = "startup.count", extraTags = {"type", "startup"}, description = "Counts the number of startups")
     @Timed(value = "startup.time", extraTags = {"type", "startup"})
     void startup(@Observes @MeterTag(resolver = ClassNameValueResolver.class) Startup event) {
-        System.out.println("StartupBean started");
+        System.getLogger(getClass().getName()).log(INFO, "StartupBean started");
         registerMeters();
         printMeters();
     }
@@ -40,7 +45,7 @@ public class StartupBean {
     }
 
     private void printMeters() {
-        System.out.println(registry.getMeters());
+        System.getLogger(getClass().getName()).log(INFO, registry.getMeters());
     }
 
 }

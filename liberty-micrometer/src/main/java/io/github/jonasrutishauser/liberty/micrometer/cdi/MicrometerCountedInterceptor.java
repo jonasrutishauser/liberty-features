@@ -43,7 +43,7 @@ public class MicrometerCountedInterceptor {
                 return ((CompletionStage<?>) context.proceed())
                         .whenComplete((result, throwable) -> recordCompletionResult(counted, tags, throwable));
             } catch (Throwable throwable) {
-                record(counted, tags, throwable);
+                recordResult(counted, tags, throwable);
                 throw throwable;
             }
         }
@@ -51,24 +51,24 @@ public class MicrometerCountedInterceptor {
         try {
             Object result = context.proceed();
             if (!counted.recordFailuresOnly()) {
-                record(counted, tags, null);
+                recordResult(counted, tags, null);
             }
             return result;
         } catch (Throwable e) {
-            record(counted, tags, e);
+            recordResult(counted, tags, e);
             throw e;
         }
     }
 
     private void recordCompletionResult(Counted counted, Tags commonTags, Throwable throwable) {
         if (throwable != null) {
-            record(counted, commonTags, throwable);
+            recordResult(counted, commonTags, throwable);
         } else if (!counted.recordFailuresOnly()) {
-            record(counted, commonTags, null);
+            recordResult(counted, commonTags, null);
         }
     }
 
-    private void record(Counted counted, Tags commonTags, Throwable throwable) {
+    private void recordResult(Counted counted, Tags commonTags, Throwable throwable) {
         Counter.Builder builder = Counter.builder(counted.value()).tags(commonTags).tags(counted.extraTags())
                 .tag("exception", InterceptorHelper.getExceptionTag(throwable)).tag("result", throwable == null ? "success" : "failure");
         String description = counted.description();

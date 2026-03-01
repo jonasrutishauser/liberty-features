@@ -73,24 +73,6 @@ public class MicrometerTimedInterceptor {
         }
     }
 
-    private void record(Timed timed, Sample sample, String exceptionClass, Tags timerTags) {
-        final String metricName = timed.value().isEmpty() ? "method.timed" : timed.value();
-        try {
-            Builder builder = io.micrometer.core.instrument.Timer.builder(metricName)
-                    .description(timed.description().isEmpty() ? null : timed.description())
-                    .tags(timerTags)
-                    .tag("exception", exceptionClass)
-                    .publishPercentileHistogram(timed.histogram())
-                    .publishPercentiles(timed.percentiles().length == 0 ? null : timed.percentiles());
-
-            sample.stop(builder.register(registry));
-        } catch (Exception e) {
-            // ignoring on purpose
-            LOGGER.log(Level.WARNING, "Unable to record observed timer value for " + metricName
-                    + " with exceptionClass " + exceptionClass, e);
-        }
-    }
-
     private List<Timer> getTimers(InvocationContext context) {
         Collection<Timed> timed = InterceptorHelper.findInterceptorBindings(context, Timed.class);
         if (timed.isEmpty()) {
@@ -134,7 +116,21 @@ public class MicrometerTimedInterceptor {
 
         @Override
         public void stop(String exceptionClass) {
-            record(timed, sample, exceptionClass, Tags.concat(commonTags, timed.extraTags()));
+            final String metricName = timed.value().isEmpty() ? "method.timed" : timed.value();
+            try {
+                Builder builder = io.micrometer.core.instrument.Timer.builder(metricName)
+                        .description(timed.description().isEmpty() ? null : timed.description())
+                        .tags(Tags.concat(commonTags, timed.extraTags()))
+                        .tag("exception", exceptionClass)
+                        .publishPercentileHistogram(timed.histogram())
+                        .publishPercentiles(timed.percentiles().length == 0 ? null : timed.percentiles());
+
+                sample.stop(builder.register(registry));
+            } catch (Exception e) {
+                // ignoring on purpose
+                LOGGER.log(Level.WARNING, e, () -> "Unable to record observed timer value for " + metricName
+                        + " with exceptionClass " + exceptionClass);
+            }
         }
     }
 
@@ -157,7 +153,7 @@ public class MicrometerTimedInterceptor {
                         .start();
             } catch (Exception e) {
                 // ignoring on purpose
-                LOGGER.log(Level.WARNING, "Unable to create long task timer named " + metricName(), e);
+                LOGGER.log(Level.WARNING, e, () -> "Unable to create long task timer named " + metricName());
                 return null;
             }
         }
@@ -168,7 +164,7 @@ public class MicrometerTimedInterceptor {
                 sample.stop();
             } catch (Exception e) {
                 // ignoring on purpose
-                LOGGER.log(Level.WARNING , "Unable to update long task timer named " + metricName(), e);
+                LOGGER.log(Level.WARNING, e, () -> "Unable to update long task timer named " + metricName());
             }
         }
     }

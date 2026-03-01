@@ -16,6 +16,9 @@ import jakarta.interceptor.InvocationContext;
 
 public class InterceptorHelper {
 
+    private InterceptorHelper() {
+    }
+
     public static <T extends Annotation> T findInterceptorBinding(InvocationContext context, Class<T> annotationType) {
         return annotationType.cast(findInterceptorBinding.apply(context, annotationType));
     }

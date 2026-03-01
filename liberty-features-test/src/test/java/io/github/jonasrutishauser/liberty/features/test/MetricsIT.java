@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import io.micrometer.core.instrument.util.IOUtils;
 
-public class MetricsIT {
+class MetricsIT {
 
     @Test
     void testEndpoint() throws IOException {

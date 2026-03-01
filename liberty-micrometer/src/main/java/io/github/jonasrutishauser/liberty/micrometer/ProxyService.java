@@ -50,7 +50,7 @@ public class ProxyService<T> implements EventListenerHook, FindHook {
         if (context.getBundle() == bundle) {
             references.remove(reference);
         } else if (Arrays.asList((String[]) reference.getProperty("objectClass")).contains(name)) {
-            references.removeIf(reference -> reference.getBundle() == context.getBundle());
+            references.removeIf(ref -> ref.getBundle() == context.getBundle());
         }
     }
 

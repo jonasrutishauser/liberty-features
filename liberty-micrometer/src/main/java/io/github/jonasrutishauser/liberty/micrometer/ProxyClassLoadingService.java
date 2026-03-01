@@ -107,7 +107,7 @@ public class ProxyClassLoadingService implements ClassLoadingService {
     }
 
     @Reference(name = "classLoadingService", service = ClassLoadingService.class)
-    protected void setClassLoadingService(ClassLoadingService ref) throws Exception {
+    protected void setClassLoadingService(ClassLoadingService ref) {
         delegate = ref;
     }
 
