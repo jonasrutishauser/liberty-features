@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FeaturesJsonGenerator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">features</a> &gt; <a href="index.source.html" class="el_package">io.github.jonasrutishauser.liberty.features</a> &gt; <span class="el_source">FeaturesJsonGenerator.java</span></div><h1>FeaturesJsonGenerator.java</h1><pre class="source lang-java linenums">package io.github.jonasrutishauser.liberty.features;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.openliberty.tools.common.plugins.util.PluginExecutionException;
+import io.openliberty.tools.common.plugins.util.PluginScenarioException;
+import io.openliberty.tools.common.plugins.util.PrepareFeatureUtil;
+
+<span class="nc" id="L22">public class FeaturesJsonGenerator {</span>
+
+<span class="nc" id="L24">    private static final Logger LOGGER = LoggerFactory.getLogger(FeaturesJsonGenerator.class);</span>
+
+    public static void main(String[] args) throws PluginScenarioException, PluginExecutionException, IOException {
+<span class="nc" id="L27">        PrepareFeatureUtil util = new PrepareFeatureUtil(new File(System.getProperty(&quot;liberty.dir&quot;, &quot;target/liberty/wlp&quot;)), System.getProperty(&quot;openliberty.version&quot;, &quot;26.0.0.1&quot;)) {</span>
+            
+            @Override
+            public void warn(String msg) {
+<span class="nc" id="L31">                LOGGER.warn(msg);</span>
+<span class="nc" id="L32">            }</span>
+            
+            @Override
+            public boolean isDebugEnabled() {
+<span class="nc" id="L36">                return LOGGER.isDebugEnabled();</span>
+            }
+            
+            @Override
+            public void info(String msg) {
+<span class="nc" id="L41">                LOGGER.info(msg);</span>
+<span class="nc" id="L42">            }</span>
+            
+            @Override
+            public void error(String msg, Throwable e) {
+<span class="nc" id="L46">                LOGGER.error(msg, e);</span>
+<span class="nc" id="L47">            }</span>
+            
+            @Override
+            public void error(String msg) {
+<span class="nc" id="L51">                LOGGER.error(msg);</span>
+<span class="nc" id="L52">            }</span>
+            
+            @Override
+            public File downloadArtifact(String groupId, String artifactId, String type, String version)
+                    throws PluginExecutionException {
+                // TODO Auto-generated method stub
+<span class="nc" id="L58">                return null;</span>
+            }
+            
+            @Override
+            public void debug(String msg, Throwable e) {
+<span class="nc" id="L63">                LOGGER.debug(msg, e);</span>
+<span class="nc" id="L64">            }</span>
+            
+            @Override
+            public void debug(Throwable e) {
+<span class="nc" id="L68">                LOGGER.debug(&quot;&quot;, e);</span>
+<span class="nc" id="L69">            }</span>
+            
+            @Override
+            public void debug(String msg) {
+<span class="nc" id="L73">                LOGGER.debug(msg);</span>
+<span class="nc" id="L74">            }</span>
+        };
+        
+<span class="nc" id="L77">        Map&lt;File, String&gt; esaFileMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L78">        Path basedir = Path.of((String) args[0]);</span>
+<span class="nc" id="L79">        Files.walkFileTree(basedir, new SimpleFileVisitor&lt;Path&gt;() {</span>
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+<span class="nc bnc" id="L82" title="All 2 branches missed.">                if (file.getFileName().toString().endsWith(&quot;.esa&quot;)) {</span>
+<span class="nc" id="L83">                    esaFileMap.put(file.toFile(), StreamSupport</span>
+<span class="nc" id="L84">                            .stream(file.subpath(basedir.getNameCount(), file.getNameCount() - 3).spliterator(), false)</span>
+<span class="nc" id="L85">                            .map(Path::toString).collect(Collectors.joining(&quot;.&quot;)));</span>
+                }
+<span class="nc" id="L87">                return FileVisitResult.CONTINUE;</span>
+            }
+        });
+<span class="nc" id="L90">        LOGGER.debug(&quot;esaFileMap: {}&quot;, esaFileMap);</span>
+<span class="nc" id="L91">        util.generateJson(System.getProperty(&quot;target.file&quot;, &quot;target/features.json&quot;), esaFileMap);</span>
+<span class="nc" id="L92">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
