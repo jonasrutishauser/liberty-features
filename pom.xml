@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>io.github.jonasrutishauser</groupId>
 		<artifactId>parent</artifactId>
-		<version>40</version>
+		<version>41</version>
 	</parent>
 
 	<groupId>io.github.jonasrutishauser.liberty</groupId>
@@ -137,21 +137,6 @@
 
 		<maven.compiler.release>17</maven.compiler.release>
 	</properties>
-
-	<reporting>
-		<plugins>
-			<plugin>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>jxr-no-fork</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-		</plugins>
-	</reporting>
 
 	<profiles>
 		<profile>

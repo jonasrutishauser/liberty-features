@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   release:
-    uses: jonasrutishauser/parent/.github/workflows/common-release.yml@v40
+    uses: jonasrutishauser/parent/.github/workflows/common-release.yml@v41
     with:
       name: 'Liberty Features'
       java-version: '17'
