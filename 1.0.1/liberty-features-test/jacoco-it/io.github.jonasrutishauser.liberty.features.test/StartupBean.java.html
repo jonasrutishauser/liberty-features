@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StartupBean.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Liberty Features Test</a> &gt; <a href="index.source.html" class="el_package">io.github.jonasrutishauser.liberty.features.test</a> &gt; <span class="el_source">StartupBean.java</span></div><h1>StartupBean.java</h1><pre class="source lang-java linenums">package io.github.jonasrutishauser.liberty.features.test;
+
+import static java.lang.System.Logger.Level.INFO;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.aop.MeterTag;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tags;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.event.Startup;
+import jakarta.inject.Inject;
+
+@ApplicationScoped
+public class StartupBean {
+
+    private final MeterRegistry registry;
+<span class="fc" id="L23">    private final List&lt;String&gt; list = new CopyOnWriteArrayList&lt;&gt;();</span>
+
+    @Inject
+<span class="fc" id="L26">    StartupBean(MeterRegistry registry) {</span>
+<span class="fc" id="L27">        this.registry = registry;</span>
+<span class="fc" id="L28">    }</span>
+
+    @Counted(value = &quot;startup.count&quot;, extraTags = {&quot;type&quot;, &quot;startup&quot;}, description = &quot;Counts the number of startups&quot;)
+    @Timed(value = &quot;startup.time&quot;, extraTags = {&quot;type&quot;, &quot;startup&quot;})
+    void startup(@Observes @MeterTag(resolver = ClassNameValueResolver.class) Startup event) {
+<span class="fc" id="L33">        System.getLogger(getClass().getName()).log(INFO, &quot;StartupBean started&quot;);</span>
+<span class="fc" id="L34">        registerMeters();</span>
+<span class="fc" id="L35">        printMeters();</span>
+<span class="fc" id="L36">    }</span>
+
+    private void registerMeters() {
+<span class="fc" id="L39">        registry.gaugeCollectionSize(&quot;sample.list&quot;, Tags.of(&quot;key&quot;, &quot;value&quot;), list);</span>
+<span class="fc" id="L40">        Counter.builder(&quot;count.me&quot;).baseUnit(&quot;beans&quot;).description(&quot;a description&quot;).tags(&quot;region&quot;, &quot;test&quot;)</span>
+<span class="fc" id="L41">                .register(registry).increment();</span>
+<span class="fc" id="L42">    }</span>
+
+    private void printMeters() {
+<span class="fc" id="L45">        System.getLogger(getClass().getName()).log(INFO, registry.getMeters());</span>
+<span class="fc" id="L46">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

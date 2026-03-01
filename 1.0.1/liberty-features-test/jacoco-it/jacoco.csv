@@ -1,0 +1,3 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Liberty Features Test,io.github.jonasrutishauser.liberty.features.test,ClassNameValueResolver,2,9,1,1,1,3,1,2,0,2
+Liberty Features Test,io.github.jonasrutishauser.liberty.features.test,StartupBean,0,65,0,0,0,14,0,4,0,4
