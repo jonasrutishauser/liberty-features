@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 import jakarta.interceptor.InvocationContext;
 
@@ -26,7 +25,7 @@ public class InterceptorHelper {
     public static <T extends Annotation> Collection<T> findInterceptorBindings(InvocationContext context,
             Class<T> annotationType) {
         return findInterceptorBindings.apply(context, annotationType).stream().map(annotationType::cast)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public static String getExceptionTag(Throwable throwable) {

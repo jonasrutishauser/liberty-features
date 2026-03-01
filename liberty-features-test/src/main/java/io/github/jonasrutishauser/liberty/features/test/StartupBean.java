@@ -2,11 +2,8 @@ package io.github.jonasrutishauser.liberty.features.test;
 
 import static java.lang.System.Logger.Level.INFO;
 
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.LogManager;
 
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
