@@ -135,7 +135,7 @@
 
 		<openliberty.version>26.0.0.2</openliberty.version>
 
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.release>17</maven.compiler.release>
 	</properties>
 
 	<profiles>
