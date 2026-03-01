@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>io.github.jonasrutishauser.liberty</groupId>
+		<artifactId>liberty-features</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>liberty-micrometer-1.0</artifactId>
+	<packaging>esa</packaging>
+	<name>micrometer-1.0</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>liberty-micrometer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.aries</groupId>
+				<artifactId>esa-maven-plugin</artifactId>
+				<configuration>
+					<generateManifest>false</generateManifest>
+					<subsystemManifestFile>${project.build.directory}/${project.build.finalName}/OSGI-INF/SUBSYSTEM.MF</subsystemManifestFile>
+					<archiveContent>all</archiveContent>
+					<manifestContent>all</manifestContent>
+					<instructions>
+						<IBM-API-Package>io.micrometer.common.annotation; type="api",
+ io.micrometer.core.annotation; type="api",
+ io.micrometer.core.aop; type="api",
+ io.micrometer.core.instrument; type="api",
+ io.micrometer.core.instrument.config; type="api"</IBM-API-Package>
+					</instructions>
+				</configuration>
+				<executions>
+					<execution>
+						<id>generate-subsysem-manifest</id>
+						<goals>
+							<goal>esa</goal>
+						</goals>
+						<phase>prepare-package</phase>
+						<configuration>
+							<generateManifest>true</generateManifest>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.github.floverfelt</groupId>
+				<artifactId>find-and-replace-maven-plugin</artifactId>
+				<version>1.2.0</version>
+				<executions>
+					<execution>
+						<id>add-subsystem-content</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>find-and-replace</goal>
+						</goals>
+						<configuration>
+							<replacementType>file-contents</replacementType>
+							<baseDir>target/${project.build.finalName}/OSGI-INF</baseDir>
+							<findRegex>(Subsystem-Content:.*[^,])(,?)$</findRegex>
+							<replaceValue>$$1,
+ io.openliberty.mpMetrics-5.0; type="osgi.subsystem.feature"; ibm.tolerates:="5.1",
+ io.openliberty.cdi-4.0; type="osgi.subsystem.feature"; ibm.tolerates:="4.1"$$2</replaceValue>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

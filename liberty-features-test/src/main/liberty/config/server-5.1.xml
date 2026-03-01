@@ -1,0 +1,11 @@
+<server description="liberty-feature-integration-test">
+	<featureManager>
+		<feature>usr:micrometer-1.0</feature>
+		<feature>mpMetrics-5.1</feature>
+	</featureManager>
+
+	<mpMetrics authentication="false"/>
+
+	<httpEndpoint id="defaultHttpEndpoint" httpPort="9081"
+		httpsPort="9444" />
+</server>

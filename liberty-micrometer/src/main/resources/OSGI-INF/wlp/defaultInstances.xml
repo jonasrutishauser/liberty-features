@@ -1,0 +1,7 @@
+<server>
+	<mpMetrics libraryRef="micrometer" />
+
+	<library id="micrometer">
+		<fileset dir="${wlp.user.dir}/extension/lib" includes="io.github.jonasrutishauser.liberty.liberty-micrometer-dependencies*.jar"/>
+	</library>
+</server>
